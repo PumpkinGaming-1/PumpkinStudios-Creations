@@ -242,7 +242,7 @@
             <span class="tag">Build Set</span>
           </div>
           <div class="card-actions">
-            <span class="btn" style="background:#333; color:#666; cursor:not-allowed;">⬇ Not Available Yet</span>
+            <button class="btn btn-green" onclick="openDownloadMenu()">⬇ Download</button>
             <button class="btn btn-outline" onclick="openScreenshots()">📷 Screenshots</button>
           </div>
         </div>
@@ -309,6 +309,16 @@
   </div>
 </div>
 
+<!-- DOWNLOAD MODAL -->
+<div id="download-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:200; align-items:center; justify-content:center;">
+  <div style="background:#1a1a1a; border:1px solid #2e2e2e; border-radius:6px; padding:36px; max-width:420px; width:90%; text-align:center;">
+    <div style="font-family:'Press Start 2P',monospace; font-size:11px; color:var(--green); margin-bottom:16px;">Medieval Castle<br>Build Set</div>
+    <div style="color:#888; font-size:13px; line-height:1.7; margin-bottom:28px;">Make sure you have a Minecraft version that supports <strong style="color:#e8e8e8;">.zip</strong> structure packs. Extract the folder into your saves directory.</div>
+    <a class="btn btn-green" href="https://github.com/PumpkinGaming-1/PumpkinStudios-Creations/raw/refs/heads/main/Medievel%20Castle%20Build%20Set.zip" download style="width:100%; justify-content:center; margin-bottom:12px;">⬇ Download Now</a>
+    <button onclick="closeDownloadMenu()" style="width:100%; font-family:'Press Start 2P',monospace; font-size:9px; background:transparent; border:1px solid #2e2e2e; color:#888; padding:10px; border-radius:3px; cursor:pointer; margin-top:4px;">✕ Cancel</button>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 <div id="lightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:200; align-items:center; justify-content:center;">
   <!-- Close -->
@@ -371,6 +381,16 @@
 
   document.getElementById('lightbox').addEventListener('click', function(e) {
     if (e.target === this) closeLightbox();
+  });
+
+  function openDownloadMenu() {
+    document.getElementById('download-modal').style.display = 'flex';
+  }
+  function closeDownloadMenu() {
+    document.getElementById('download-modal').style.display = 'none';
+  }
+  document.getElementById('download-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeDownloadMenu();
   });
 
   function openScreenshots() {
