@@ -189,6 +189,7 @@
     display: block;
     border: 1px solid var(--border);
     transition: border-color .2s, transform .15s;
+    cursor: pointer;
   }
   .ss-grid img:hover { border-color: var(--green); transform: translateY(-2px); }
 
@@ -298,14 +299,28 @@
     </div>
 
     <div class="ss-grid">
-      <img src="2026-06-14_20.38.41.png" alt="Screenshot 1">
-      <img src="2026-06-14_20.38.14.png" alt="Screenshot 2">
-      <img src="2026-06-14_20.37.55.png" alt="Screenshot 3">
-      <img src="2026-06-14_20.37.50.png" alt="Screenshot 4">
-      <img src="2026-06-14_20.37.44.png" alt="Screenshot 5">
-      <img src="2026-06-14_20.37.36.png" alt="Screenshot 6">
+      <img src="2026-06-14_20.38.41.png" alt="Screenshot 1" onclick="openLightbox(0)">
+      <img src="2026-06-14_20.38.14.png" alt="Screenshot 2" onclick="openLightbox(1)">
+      <img src="2026-06-14_20.37.55.png" alt="Screenshot 3" onclick="openLightbox(2)">
+      <img src="2026-06-14_20.37.50.png" alt="Screenshot 4" onclick="openLightbox(3)">
+      <img src="2026-06-14_20.37.44.png" alt="Screenshot 5" onclick="openLightbox(4)">
+      <img src="2026-06-14_20.37.36.png" alt="Screenshot 6" onclick="openLightbox(5)">
     </div>
   </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:200; align-items:center; justify-content:center;">
+  <!-- Close -->
+  <button onclick="closeLightbox()" style="position:absolute; top:20px; right:24px; background:transparent; border:1px solid #555; color:#aaa; font-family:'Press Start 2P',monospace; font-size:9px; padding:8px 12px; border-radius:3px; cursor:pointer; z-index:201;">✕ Close</button>
+  <!-- Counter -->
+  <div id="lb-counter" style="position:absolute; top:24px; left:50%; transform:translateX(-50%); font-family:'Press Start 2P',monospace; font-size:9px; color:#888;"></div>
+  <!-- Left arrow -->
+  <button onclick="lbMove(-1)" style="position:absolute; left:16px; background:transparent; border:1px solid #555; color:#ccc; font-size:22px; padding:10px 16px; border-radius:3px; cursor:pointer; transition:border-color .15s;" onmouseover="this.style.borderColor='#4caf3c'" onmouseout="this.style.borderColor='#555'">‹</button>
+  <!-- Image -->
+  <img id="lb-img" src="" alt="" style="max-width:90vw; max-height:85vh; border-radius:4px; box-shadow:0 0 60px rgba(0,0,0,0.8); user-select:none;">
+  <!-- Right arrow -->
+  <button onclick="lbMove(1)" style="position:absolute; right:16px; background:transparent; border:1px solid #555; color:#ccc; font-size:22px; padding:10px 16px; border-radius:3px; cursor:pointer; transition:border-color .15s;" onmouseover="this.style.borderColor='#4caf3c'" onmouseout="this.style.borderColor='#555'">›</button>
 </div>
 
 <script>
@@ -315,6 +330,49 @@
     document.getElementById('tab-' + name).classList.add('active');
     btn.classList.add('active');
   }
+  const lbImages = [
+    "2026-06-14_20.38.41.png",
+    "2026-06-14_20.38.14.png",
+    "2026-06-14_20.37.55.png",
+    "2026-06-14_20.37.50.png",
+    "2026-06-14_20.37.44.png",
+    "2026-06-14_20.37.36.png"
+  ];
+  let lbIndex = 0;
+
+  function openLightbox(i) {
+    lbIndex = i;
+    updateLightbox();
+    const lb = document.getElementById('lightbox');
+    lb.style.display = 'flex';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+  }
+
+  function lbMove(dir) {
+    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+    updateLightbox();
+  }
+
+  function updateLightbox() {
+    document.getElementById('lb-img').src = lbImages[lbIndex];
+    document.getElementById('lb-counter').textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+  }
+
+  document.addEventListener('keydown', function(e) {
+    const lb = document.getElementById('lightbox');
+    if (lb.style.display === 'none') return;
+    if (e.key === 'ArrowLeft')  lbMove(-1);
+    if (e.key === 'ArrowRight') lbMove(1);
+    if (e.key === 'Escape')     closeLightbox();
+  });
+
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+
   function openScreenshots() {
     document.getElementById('screenshots-overlay').style.display = 'block';
     window.scrollTo(0, 0);
