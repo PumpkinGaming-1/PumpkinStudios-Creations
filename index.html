@@ -16,6 +16,7 @@
     --discord:  #5865F2;
     --text:     #e8e8e8;
     --muted:    #888;
+    --orange:   #f97316;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,8 +27,10 @@
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
     padding: 0 0 80px;
+    overflow-x: hidden;
   }
 
+  /* grid bg */
   body::before {
     content: '';
     position: fixed;
@@ -40,6 +43,109 @@
     z-index: 0;
   }
 
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 56px 24px 48px;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+  }
+
+  .hero-logo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(14px, 3.5vw, 26px);
+    color: var(--green);
+    text-shadow: 0 0 30px rgba(76,175,60,.5), 3px 3px 0 var(--green-dim);
+    letter-spacing: 2px;
+    line-height: 1.6;
+    animation: glowPulse 3s ease-in-out infinite;
+    margin-bottom: 16px;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 20px rgba(76,175,60,.4), 3px 3px 0 var(--green-dim); }
+    50%       { text-shadow: 0 0 40px rgba(76,175,60,.8), 3px 3px 0 var(--green-dim); }
+  }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  /* stats row */
+  .hero-stats {
+    display: inline-flex;
+    gap: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 28px;
+    margin-bottom: 0;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: var(--green);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+  /* ── NEWS TICKER ── */
+  .ticker-wrap {
+    position: relative;
+    z-index: 1;
+    background: #111;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+  }
+  .ticker-label {
+    flex-shrink: 0;
+    background: var(--green);
+    color: #000;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    padding: 4px 12px;
+    margin-right: 16px;
+    z-index: 2;
+    white-space: nowrap;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 60px;
+    animation: ticker 22s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-track span {
+    font-size: 12px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .ticker-track span strong { color: var(--green); }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── TABS ── */
   .tab-bar {
     position: relative;
     z-index: 1;
@@ -87,12 +193,7 @@
     text-transform: uppercase;
     margin-bottom: 20px;
   }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   main {
     position: relative;
@@ -104,6 +205,7 @@
 
   section { margin-bottom: 56px; }
 
+  /* ── CARDS ── */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -113,16 +215,37 @@
     display: flex;
     align-items: flex-start;
     gap: 20px;
-    transition: border-color .2s, transform .15s;
+    transition: border-color .2s, transform .15s, box-shadow .2s;
+    position: relative;
+    overflow: hidden;
   }
-  .card:hover { border-color: var(--green); transform: translateY(-2px); }
+  .card:hover {
+    border-color: var(--green);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(76,175,60,.08);
+  }
+
+  /* "NEW" badge */
+  .badge-new {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 3px 7px;
+    border-radius: 2px;
+    animation: badgePop .4s ease;
+  }
+  @keyframes badgePop {
+    0%   { transform: scale(0); }
+    70%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
 
   .card-body { flex: 1; min-width: 0; }
-
   .card-title { font-weight: 600; font-size: 16px; margin-bottom: 4px; }
-
   .card-desc { color: var(--muted); font-size: 13px; line-height: 1.5; margin-bottom: 14px; }
-
   .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
   .tag {
     font-size: 10px;
@@ -133,9 +256,9 @@
     padding: 3px 7px;
     color: var(--muted);
   }
-
   .card-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
+  /* ── BUTTONS ── */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -152,11 +275,11 @@
   }
   .btn:hover { opacity: .85; transform: translateY(-1px); }
   .btn:active { transform: translateY(0); }
-
-  .btn-green  { background: var(--green); color: #000; }
+  .btn-green   { background: var(--green); color: #000; }
   .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
   .btn-discord { background: var(--discord); color: #fff; }
 
+  /* ── COMMUNITY CARDS ── */
   .discord-card {
     background: linear-gradient(135deg, #1e2040 0%, #1a1a2e 100%);
     border: 1px solid #3a3f6b;
@@ -169,14 +292,13 @@
     transition: border-color .2s, transform .15s;
   }
   .discord-card:hover { border-color: var(--discord); transform: translateY(-2px); }
-
   .discord-logo { width: 52px; height: 52px; flex-shrink: 0; display: grid; place-items: center; }
   .discord-logo svg { width: 42px; height: 42px; }
-
   .discord-body { flex: 1; }
   .discord-name { font-weight: 600; font-size: 16px; margin-bottom: 4px; }
   .discord-desc { color: var(--muted); font-size: 13px; margin-bottom: 14px; line-height: 1.5; }
 
+  /* ── SCREENSHOT GRID ── */
   .ss-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -184,24 +306,65 @@
     margin-bottom: 40px;
   }
   .ss-grid img {
-    width: 100%;
-    border-radius: 4px;
-    display: block;
+    width: 100%; border-radius: 4px; display: block;
     border: 1px solid var(--border);
     transition: border-color .2s, transform .15s;
     cursor: pointer;
   }
   .ss-grid img:hover { border-color: var(--green); transform: translateY(-2px); }
 
+  /* ── FLOATING PARTICLES ── */
+  .particle {
+    position: fixed;
+    width: 4px; height: 4px;
+    background: var(--green);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 9999;
+    animation: floatUp 1.2s ease-out forwards;
+  }
+  @keyframes floatUp {
+    0%   { opacity: .8; transform: translateY(0) scale(1); }
+    100% { opacity: 0;  transform: translateY(-60px) scale(0); }
+  }
+
   @media (max-width: 560px) {
-    .card { flex-direction: column; }
-    .discord-card { flex-direction: column; text-align: center; }
+    .card, .discord-card { flex-direction: column; }
     .tab-btn { font-size: 7px; padding: 8px 10px; }
+    .hero-stats { gap: 20px; padding: 12px 16px; }
   }
 </style>
 </head>
 <body>
 
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-logo">🎃 PumpkinStudios<br>Creations</div>
+  <div class="hero-sub">Maps · Build Sets · Community</div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">2</span><span class="stat-label">Creations</span></div>
+    <div class="stat"><span class="stat-num" id="dl-count">0</span><span class="stat-label">Downloads</span></div>
+    <div class="stat"><span class="stat-num">1</span><span class="stat-label">Server</span></div>
+  </div>
+</div>
+
+<!-- ── NEWS TICKER ── -->
+<div class="ticker-wrap">
+  <div class="ticker-label">NEWS</div>
+  <div class="ticker-track" id="ticker-inner">
+    <span>⛏ <strong>Medieval Castle Build Set</strong> is now available to download!</span>
+    <span>🗺️ <strong>Area Unlocked</strong> is coming soon — stay tuned!</span>
+    <span>📺 Check out <strong>PumpkinStudios</strong> on YouTube for leaks &amp; trailers</span>
+    <span>💬 Join the <strong>OrbitCraft Discord</strong> for updates &amp; suggestions</span>
+    <span>⛏ <strong>Medieval Castle Build Set</strong> is now available to download!</span>
+    <span>🗺️ <strong>Area Unlocked</strong> is coming soon — stay tuned!</span>
+    <span>📺 Check out <strong>PumpkinStudios</strong> on YouTube for leaks &amp; trailers</span>
+    <span>💬 Join the <strong>OrbitCraft Discord</strong> for updates &amp; suggestions</span>
+  </div>
+</div>
+
+<!-- ── TABS ── -->
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('maps', this)">Maps</button>
   <button class="tab-btn" onclick="switchTab('buildsets', this)">Build Sets</button>
@@ -236,6 +399,7 @@
     <section>
       <div class="section-label">Build Sets</div>
       <div class="card">
+        <div class="badge-new">NEW</div>
         <div class="card-body">
           <div class="card-title">Medieval Castle Build Set</div>
           <div class="card-tags">
@@ -270,7 +434,7 @@
 
     <section>
       <div class="section-label">YouTube</div>
-      <div class="discord-card" style="background: linear-gradient(135deg, #1a0a0a 0%, #200d0d 100%); border-color: #4a1f1f;">
+      <div class="discord-card" style="background:linear-gradient(135deg,#1a0a0a 0%,#200d0d 100%);border-color:#4a1f1f;">
         <div class="discord-logo">
           <svg viewBox="0 0 24 24" fill="#FF0000" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -279,7 +443,7 @@
         <div class="discord-body">
           <div class="discord-name">PumpkinStudios</div>
           <div class="discord-desc">Check out my YouTube channel for leaks, trailers and more!</div>
-          <a class="btn" href="https://www.youtube.com/@PumpkinStudios-846" target="_blank" style="background:#FF0000; color:#fff;">▶ Visit Channel</a>
+          <a class="btn" href="https://www.youtube.com/@PumpkinStudios-846" target="_blank" style="background:#FF0000;color:#fff;">▶ Visit Channel</a>
         </div>
       </div>
     </section>
@@ -297,7 +461,6 @@
         <div style="color:var(--muted); font-size:13px;">Screenshots</div>
       </div>
     </div>
-
     <div class="ss-grid">
       <img src="2026-06-14_20.38.41.png" alt="Screenshot 1" onclick="openLightbox(0)">
       <img src="2026-06-14_20.38.14.png" alt="Screenshot 2" onclick="openLightbox(1)">
@@ -313,93 +476,105 @@
 <div id="download-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:200; align-items:center; justify-content:center;">
   <div style="background:#1a1a1a; border:1px solid #2e2e2e; border-radius:6px; padding:36px; max-width:420px; width:90%; text-align:center;">
     <div style="font-family:'Press Start 2P',monospace; font-size:11px; color:var(--green); margin-bottom:16px;">Medieval Castle<br>Build Set</div>
-    <div style="color:#888; font-size:13px; line-height:1.7; margin-bottom:28px;">Make sure you have a Minecraft version that supports <strong style="color:#e8e8e8;">.zip</strong> structure packs. Extract the folder into your saves directory.</div>
-    <a class="btn btn-green" href="https://github.com/PumpkinGaming-1/PumpkinStudios-Creations/raw/refs/heads/main/Medievel%20Castle%20Build%20Set.zip" download style="width:100%; justify-content:center; margin-bottom:12px;">⬇ Download Now</a>
+    <div style="color:#888; font-size:13px; line-height:1.7; margin-bottom:28px;">
+      <strong style="color:#e8e8e8;">How to install:</strong><br><br>
+      1. Download and <strong style="color:#e8e8e8;">unzip</strong> the file<br>
+      2. Press <strong style="color:#e8e8e8;">Windows + R</strong> and type <strong style="color:#4caf3c;">%appdata%</strong><br>
+      3. Open the <strong style="color:#e8e8e8;">.minecraft</strong> folder<br>
+      4. Place the unzipped folder into your <strong style="color:#e8e8e8;">saves</strong> folder
+    </div>
+    <a class="btn btn-green" href="https://github.com/PumpkinGaming-1/PumpkinStudios-Creations/raw/refs/heads/main/Medievel%20Castle%20Build%20Set.zip" download onclick="countDownload()" style="width:100%; justify-content:center; margin-bottom:12px;">⬇ Download Now</a>
     <button onclick="closeDownloadMenu()" style="width:100%; font-family:'Press Start 2P',monospace; font-size:9px; background:transparent; border:1px solid #2e2e2e; color:#888; padding:10px; border-radius:3px; cursor:pointer; margin-top:4px;">✕ Cancel</button>
   </div>
 </div>
 
 <!-- LIGHTBOX -->
-<div id="lightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:200; align-items:center; justify-content:center;">
-  <!-- Close -->
-  <button onclick="closeLightbox()" style="position:absolute; top:20px; right:24px; background:transparent; border:1px solid #555; color:#aaa; font-family:'Press Start 2P',monospace; font-size:9px; padding:8px 12px; border-radius:3px; cursor:pointer; z-index:201;">✕ Close</button>
-  <!-- Counter -->
+<div id="lightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:300; align-items:center; justify-content:center;">
+  <button onclick="closeLightbox()" style="position:absolute; top:20px; right:24px; background:transparent; border:1px solid #555; color:#aaa; font-family:'Press Start 2P',monospace; font-size:9px; padding:8px 12px; border-radius:3px; cursor:pointer; z-index:301;">✕ Close</button>
   <div id="lb-counter" style="position:absolute; top:24px; left:50%; transform:translateX(-50%); font-family:'Press Start 2P',monospace; font-size:9px; color:#888;"></div>
-  <!-- Left arrow -->
-  <button onclick="lbMove(-1)" style="position:absolute; left:16px; background:transparent; border:1px solid #555; color:#ccc; font-size:22px; padding:10px 16px; border-radius:3px; cursor:pointer; transition:border-color .15s;" onmouseover="this.style.borderColor='#4caf3c'" onmouseout="this.style.borderColor='#555'">‹</button>
-  <!-- Image -->
+  <button onclick="lbMove(-1)" style="position:absolute; left:16px; background:transparent; border:1px solid #555; color:#ccc; font-size:22px; padding:10px 16px; border-radius:3px; cursor:pointer;" onmouseover="this.style.borderColor='#4caf3c'" onmouseout="this.style.borderColor='#555'">‹</button>
   <img id="lb-img" src="" alt="" style="max-width:90vw; max-height:85vh; border-radius:4px; box-shadow:0 0 60px rgba(0,0,0,0.8); user-select:none;">
-  <!-- Right arrow -->
-  <button onclick="lbMove(1)" style="position:absolute; right:16px; background:transparent; border:1px solid #555; color:#ccc; font-size:22px; padding:10px 16px; border-radius:3px; cursor:pointer; transition:border-color .15s;" onmouseover="this.style.borderColor='#4caf3c'" onmouseout="this.style.borderColor='#555'">›</button>
+  <button onclick="lbMove(1)" style="position:absolute; right:16px; background:transparent; border:1px solid #555; color:#ccc; font-size:22px; padding:10px 16px; border-radius:3px; cursor:pointer;" onmouseover="this.style.borderColor='#4caf3c'" onmouseout="this.style.borderColor='#555'">›</button>
 </div>
 
 <script>
+  // ── tabs ──
   function switchTab(name, btn) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     btn.classList.add('active');
   }
+
+  // ── download counter (localStorage) ──
+  function countDownload() {
+    let n = parseInt(localStorage.getItem('ps_downloads') || '0') + 1;
+    localStorage.setItem('ps_downloads', n);
+    updateDlCount();
+  }
+  function updateDlCount() {
+    const n = parseInt(localStorage.getItem('ps_downloads') || '0');
+    animateCount(document.getElementById('dl-count'), n);
+  }
+  function animateCount(el, target) {
+    let start = 0, duration = 1200;
+    let step = timestamp => {
+      if (!start) start = timestamp;
+      let progress = Math.min((timestamp - start) / duration, 1);
+      el.textContent = Math.floor(progress * target);
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    };
+    requestAnimationFrame(step);
+  }
+  updateDlCount();
+
+  // ── particle burst on card hover ──
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', (e) => {
+      for (let i = 0; i < 6; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = (e.clientX + (Math.random() - 0.5) * 40) + 'px';
+        p.style.top  = (e.clientY + (Math.random() - 0.5) * 20) + 'px';
+        p.style.background = Math.random() > 0.5 ? '#4caf3c' : '#f97316';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1200);
+      }
+    });
+  });
+
+  // ── lightbox ──
   const lbImages = [
-    "2026-06-14_20.38.41.png",
-    "2026-06-14_20.38.14.png",
-    "2026-06-14_20.37.55.png",
-    "2026-06-14_20.37.50.png",
-    "2026-06-14_20.37.44.png",
-    "2026-06-14_20.37.36.png"
+    "2026-06-14_20.38.41.png","2026-06-14_20.38.14.png",
+    "2026-06-14_20.37.55.png","2026-06-14_20.37.50.png",
+    "2026-06-14_20.37.44.png","2026-06-14_20.37.36.png"
   ];
   let lbIndex = 0;
-
-  function openLightbox(i) {
-    lbIndex = i;
-    updateLightbox();
-    const lb = document.getElementById('lightbox');
-    lb.style.display = 'flex';
-  }
-
-  function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
-  }
-
-  function lbMove(dir) {
-    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
-    updateLightbox();
-  }
-
+  function openLightbox(i) { lbIndex = i; updateLightbox(); document.getElementById('lightbox').style.display = 'flex'; }
+  function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+  function lbMove(dir) { lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length; updateLightbox(); }
   function updateLightbox() {
     document.getElementById('lb-img').src = lbImages[lbIndex];
     document.getElementById('lb-counter').textContent = (lbIndex + 1) + ' / ' + lbImages.length;
   }
-
-  document.addEventListener('keydown', function(e) {
-    const lb = document.getElementById('lightbox');
-    if (lb.style.display === 'none') return;
-    if (e.key === 'ArrowLeft')  lbMove(-1);
-    if (e.key === 'ArrowRight') lbMove(1);
-    if (e.key === 'Escape')     closeLightbox();
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('lightbox').style.display !== 'none') {
+      if (e.key === 'ArrowLeft') lbMove(-1);
+      if (e.key === 'ArrowRight') lbMove(1);
+      if (e.key === 'Escape') closeLightbox();
+    }
   });
+  document.getElementById('lightbox').addEventListener('click', e => { if (e.target === document.getElementById('lightbox')) closeLightbox(); });
 
-  document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) closeLightbox();
-  });
+  // ── download modal ──
+  function openDownloadMenu() { document.getElementById('download-modal').style.display = 'flex'; }
+  function closeDownloadMenu() { document.getElementById('download-modal').style.display = 'none'; }
+  document.getElementById('download-modal').addEventListener('click', e => { if (e.target === document.getElementById('download-modal')) closeDownloadMenu(); });
 
-  function openDownloadMenu() {
-    document.getElementById('download-modal').style.display = 'flex';
-  }
-  function closeDownloadMenu() {
-    document.getElementById('download-modal').style.display = 'none';
-  }
-  document.getElementById('download-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeDownloadMenu();
-  });
-
-  function openScreenshots() {
-    document.getElementById('screenshots-overlay').style.display = 'block';
-    window.scrollTo(0, 0);
-  }
-  function closeScreenshots() {
-    document.getElementById('screenshots-overlay').style.display = 'none';
-  }
+  // ── screenshots ──
+  function openScreenshots() { document.getElementById('screenshots-overlay').style.display = 'block'; window.scrollTo(0,0); }
+  function closeScreenshots() { document.getElementById('screenshots-overlay').style.display = 'none'; }
 </script>
 
 </body>
