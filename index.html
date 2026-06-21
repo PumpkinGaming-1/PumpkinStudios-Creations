@@ -516,7 +516,7 @@
   (function initCountdown() {
     let target = localStorage.getItem('ps_release_target');
     if (!target) {
-      target = Date.now() + 5 * 24 * 60 * 60 * 1000;
+      target = Date.now() + 6 * 24 * 60 * 60 * 1000;
       localStorage.setItem('ps_release_target', target);
     } else {
       target = parseInt(target);
