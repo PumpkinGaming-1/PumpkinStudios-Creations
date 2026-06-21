@@ -82,7 +82,18 @@
     font-size: 13px;
     letter-spacing: 3px;
     text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .countdown-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .5px;
     margin-bottom: 28px;
+  }
+  .countdown-label span {
+    color: var(--green);
+    font-weight: 600;
   }
 
   /* stats row */
@@ -340,8 +351,9 @@
 
 <!-- ── HERO ── -->
 <div class="hero">
-  <div class="hero-logo">🎃 PumpkinStudios<br>Creations</div>
+  <div class="hero-logo">PumpkinStudios<br>Creations</div>
   <div class="hero-sub">Maps · Build Sets · Community</div>
+  <div class="countdown-label">OrbitCraft Minecraft Server Release: <span id="countdown-text">calculating...</span></div>
   <div class="hero-stats">
     <div class="stat"><span class="stat-num">2</span><span class="stat-label">Creations</span></div>
     <div class="stat"><span class="stat-num" id="dl-count">0</span><span class="stat-label">Downloads</span></div>
@@ -353,14 +365,14 @@
 <div class="ticker-wrap">
   <div class="ticker-label">NEWS</div>
   <div class="ticker-track" id="ticker-inner">
-    <span>⛏ <strong>Medieval Castle Build Set</strong> is now available to download!</span>
-    <span>🗺️ <strong>Area Unlocked</strong> is coming soon — stay tuned!</span>
-    <span>📺 Check out <strong>PumpkinStudios</strong> on YouTube for leaks &amp; trailers</span>
-    <span>💬 Join the <strong>OrbitCraft Discord</strong> for updates &amp; suggestions</span>
-    <span>⛏ <strong>Medieval Castle Build Set</strong> is now available to download!</span>
-    <span>🗺️ <strong>Area Unlocked</strong> is coming soon — stay tuned!</span>
-    <span>📺 Check out <strong>PumpkinStudios</strong> on YouTube for leaks &amp; trailers</span>
-    <span>💬 Join the <strong>OrbitCraft Discord</strong> for updates &amp; suggestions</span>
+    <span><strong>Medieval Castle Build Set</strong> is now available to download!</span>
+    <span><strong>Area Unlocked</strong> is coming soon — stay tuned!</span>
+    <span>Check out <strong>PumpkinStudios</strong> on YouTube for leaks &amp; trailers</span>
+    <span>Join the <strong>OrbitCraft Discord</strong> for updates &amp; suggestions</span>
+    <span><strong>Medieval Castle Build Set</strong> is now available to download!</span>
+    <span><strong>Area Unlocked</strong> is coming soon — stay tuned!</span>
+    <span>Check out <strong>PumpkinStudios</strong> on YouTube for leaks &amp; trailers</span>
+    <span>Join the <strong>OrbitCraft Discord</strong> for updates &amp; suggestions</span>
   </div>
 </div>
 
@@ -498,6 +510,39 @@
 </div>
 
 <script>
+  // ── countdown timer ──
+  // Set the release date to 5 days from when this script first runs,
+  // and persist it so the countdown stays consistent across visits.
+  (function initCountdown() {
+    let target = localStorage.getItem('ps_release_target');
+    if (!target) {
+      target = Date.now() + 5 * 24 * 60 * 60 * 1000;
+      localStorage.setItem('ps_release_target', target);
+    } else {
+      target = parseInt(target);
+    }
+
+    function tick() {
+      const now = Date.now();
+      let diff = target - now;
+      const el = document.getElementById('countdown-text');
+      if (diff <= 0) {
+        el.textContent = "It's here!";
+        return;
+      }
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      diff -= d * 1000 * 60 * 60 * 24;
+      const h = Math.floor(diff / (1000 * 60 * 60));
+      diff -= h * 1000 * 60 * 60;
+      const m = Math.floor(diff / (1000 * 60));
+      diff -= m * 1000 * 60;
+      const s = Math.floor(diff / 1000);
+      el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+      requestAnimationFrame(() => setTimeout(tick, 1000));
+    }
+    tick();
+  })();
+
   // ── tabs ──
   function switchTab(name, btn) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
